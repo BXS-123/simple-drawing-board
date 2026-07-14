@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的作品 - 简易画板工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .works-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .works-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .works-header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+        .btn-new-work {
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-new-work:hover {
+            background-color: #1557b0;
+        }
+        .btn-user-center {
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-user-center:hover {
+            background-color: #e0e0e0;
+        }
+        .btn-logout {
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            color: #d93025;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-logout:hover {
+            background-color: #ffebee;
+        }
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .work-item {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .work-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .work-preview {
+            height: 200px;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .work-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .work-info {
+            padding: 15px;
+        }
+        .work-title {
+            font-size: 18px;
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .work-meta {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .work-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-action {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        .btn-action:hover {
+            background-color: #f5f5f5;
+        }
+        .btn-edit {
+            color: #1a73e8;
+            border-color: #1a73e8;
+        }
+        .btn-edit:hover {
+            background-color: #e8f0fe;
+        }
+        .btn-delete {
+            color: #d93025;
+            border-color: #d93025;
+        }
+        .btn-delete:hover {
+            background-color: #ffebee;
+        }
+        .no-works {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .no-works-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        .no-works p {
+            margin: 0;
+            font-size: 18px;
+        }
+        .username-display {
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .custom-modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        .custom-modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .custom-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .custom-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+        .custom-modal-close:hover {
+            color: #333;
+        }
+        .custom-modal-body {
+            padding: 20px;
+        }
+        .custom-modal-body p {
+            margin: 0;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .custom-modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .custom-modal-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #1a73e8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1557b0;
+        }
+        .btn-success {
+            background-color: #2e7d32;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #1b5e20;
+        }
+        .btn-error {
+            background-color: #d93025;
+            color: white;
+        }
+        .btn-error:hover {
+            background-color: #b92519;
+        }
+        .btn-cancel {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+        .modal-warning .custom-modal-header {
+            background-color: #fff3e0;
+        }
+        .modal-warning .custom-modal-header h3 {
+            color: #e65100;
+        }
+        .modal-info .custom-modal-header {
+            background-color: #e3f2fd;
+        }
+        .modal-info .custom-modal-header h3 {
+            color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+    <div class="works-container">
+        <div class="works-header">
+            <h1>我的作品</h1>
+            <div class="header-actions">
+                <span class="username-display" id="currentUsername"></span>
+                <button id="newWorkBtn" class="btn-new-work">
+                    <i class="fas fa-plus"></i> 新建作品
+                </button>
+                <button id="userCenterBtn" class="btn-user-center">
+                    <i class="fas fa-user-cog"></i> 返回首页
+                </button>
+                <button id="logoutBtn" class="btn-logout">退出登录</button>
+            </div>
+        </div>
+        
+        <div id="worksGrid" class="works-grid">
+            <!-- 作品列表将通过JavaScript动态生成 -->
+        </div>
+        
+        <div id="noWorks" class="no-works" style="display: none;">
+            <div class="no-works-icon"><i class="fas fa-paint-brush"></i></div>
+            <p>还没有作品，点击上方的"新建作品"开始创作吧！</p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="works.js"></script>
+</body>
+</html>

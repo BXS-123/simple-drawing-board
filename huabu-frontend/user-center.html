@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 简易画板工具</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .user-center-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .user-center-header {
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .user-center-header h1 {
+            margin: 0;
+            color: #333;
+        }
+        .back-btn {
+            padding: 10px 20px;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            background-color: #e0e0e0;
+        }
+        .section {
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .section h2 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #1a73e8;
+        }
+        .btn-submit {
+            padding: 10px 20px;
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .btn-submit:hover {
+            background-color: #1557b0;
+        }
+        .btn-danger {
+            padding: 10px 20px;
+            background-color: #d93025;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .btn-danger:hover {
+            background-color: #b92519;
+        }
+        .error-message {
+            color: #d93025;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #ffebee;
+            border-radius: 4px;
+            display: none;
+        }
+        .success-message {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #e8f5e8;
+            border-radius: 4px;
+            display: none;
+        }
+        .warning-message {
+            color: #f57c00;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #fff3e0;
+            border-radius: 4px;
+        }
+        .user-info {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+        .user-info-item {
+            margin-bottom: 10px;
+        }
+        .user-info-item:last-child {
+            margin-bottom: 0;
+        }
+        .user-info-label {
+            font-weight: 500;
+            color: #666;
+        }
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .custom-modal {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 450px;
+            overflow: hidden;
+        }
+        .custom-modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .custom-modal-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .custom-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+        }
+        .custom-modal-close:hover {
+            color: #333;
+        }
+        .custom-modal-body {
+            padding: 20px;
+        }
+        .custom-modal-body p {
+            margin: 0;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        .custom-modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .custom-modal-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #1a73e8;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1557b0;
+        }
+        .btn-success {
+            background-color: #2e7d32;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #1b5e20;
+        }
+        .btn-error {
+            background-color: #d93025;
+            color: white;
+        }
+        .btn-error:hover {
+            background-color: #b92519;
+        }
+        .btn-cancel {
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+        .modal-warning .custom-modal-header {
+            background-color: #fff3e0;
+        }
+        .modal-warning .custom-modal-header h3 {
+            color: #e65100;
+        }
+        .modal-info .custom-modal-header {
+            background-color: #e3f2fd;
+        }
+        .modal-info .custom-modal-header h3 {
+            color: #1565c0;
+        }
+        .modal-success .custom-modal-header {
+            background-color: #e8f5e9;
+        }
+        .modal-success .custom-modal-header h3 {
+            color: #2e7d32;
+        }
+        .modal-error .custom-modal-header {
+            background-color: #ffebee;
+        }
+        .modal-error .custom-modal-header h3 {
+            color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-center-container">
+        <button id="backBtn" class="back-btn">
+            <i class="fas fa-arrow-left"></i> 返回首页
+        </button>
+        <div class="user-center-header">
+            <h1>个人中心</h1>
+        </div>
+        <!-- 用户基本信息 -->
+        <div class="section">
+            <h2><i class="fas fa-user"></i> 用户信息</h2>
+            <div class="user-info">
+                <div class="user-info-item">
+                    <span class="user-info-label">用户名：</span>
+                    <span id="usernameDisplay"></span>
+                </div>
+                <div class="user-info-item">
+                    <span class="user-info-label">注册时间：</span>
+                    <span id="registerTimeDisplay"></span>
+                </div>
+            </div>
+        </div>
+        <!-- 修改密码 -->
+        <div class="section">
+            <h2><i class="fas fa-key"></i> 账号管理</h2>
+            <div id="passwordError" class="error-message"></div>
+            <div id="passwordSuccess" class="success-message"></div>
+            <div class="form-group">
+                <label for="currentPassword">当前密码</label>
+                <input type="password" id="currentPassword" placeholder="请输入当前密码" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">新密码</label>
+                <input type="password" id="newPassword" placeholder="请设置新密码（至少6位）" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmNewPassword">确认新密码</label>
+                <input type="password" id="confirmNewPassword" placeholder="请再次输入新密码" required>
+            </div>
+            <button id="changePasswordBtn" class="btn-submit">修改密码</button>
+        </div>
+        <!-- 账号注销 -->
+        <div class="section">
+            <h2><i class="fas fa-user-slash"></i> 账号注销</h2>
+            <div class="warning-message">
+                <i class="fas fa-exclamation-triangle"></i> 警告：账号注销后，您的所有作品和数据将被永久删除，无法恢复！
+            </div>
+            <div id="deleteError" class="error-message"></div>
+            <div id="deleteSuccess" class="success-message"></div>
+            <button id="deleteAccountBtn" class="btn-danger">
+                <i class="fas fa-trash-alt"></i> 注销账号
+            </button>
+        </div>
+    </div>
+    <script src="auth.js"></script>
+    <script src="user-center.js"></script>
+</body>
+</html>

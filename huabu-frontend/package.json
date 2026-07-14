@@ -1,0 +1,23 @@
+{
+  "name": "huabu-frontend",
+  "version": "1.0.0",
+  "description": "简易画板工具软件 - 基于HTML5 Canvas的在线绘图工具",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "serve": "vite --host 127.0.0.1 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173"
+  },
+  "keywords": [
+    "canvas",
+    "drawing",
+    "painting",
+    "画板"
+  ],
+  "author": "简易画板团队",
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
